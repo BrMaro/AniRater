@@ -18,6 +18,7 @@ def fetch_anime_from_jikan(mal_id):
         print(f"Error fetching anime data: {response.status_code}")
         return None
 
+
 # print(fetch_anime_from_jikan(1))
 
 
@@ -37,36 +38,70 @@ def fetch_anime_by_difficulty(level):
         start, end = 5001, 999999  # No upper limit
 
     # Calculate the number of pages needed
-    page_start = start // 25 + 1  # Jikan API has a maximum of 25 items per page
-    pages_needed = (end - start) // 25 + 1  # Calculate how many pages we need
+    page_start = start // 50 + 1  # Jikan API has a maximum of 25 items per page
+    page_end = end // 50   # Calculate the last page number to fetch
+    print(page_start, page_end)
+    # Randomly select a page within the range of pages to fetch
+    random_page = random.randint(page_start, page_end)
 
-    all_anime = []
+    # Fetch the anime data from the randomly selected page
+    url = f'{JIKAN_API_URL}/top/anime?filter=bypopularity&limit=25&page={random_page}'
+    response = requests.get(url)
 
-    for page in range(page_start, page_start + pages_needed):
-        url = f'{JIKAN_API_URL}/top/anime?type=tv&limit=25&page={page}'
-        response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        anime_list = data['data']
 
-        if response.status_code == 200:
-            data = response.json()
-            anime_list = data['data']
-            all_anime.extend(anime_list)
-        else:
-            print(f"Error fetching anime data: {response.status_code}, {response.text}")
-            return None
+        if anime_list:
+            # Randomly select one anime from the list
+            selected_anime = random.choice(anime_list)
+            # Fetch additional details for the selected anime
+            anime_details_url = f"{JIKAN_API_URL}/anime/{selected_anime['mal_id']}"
+            details_response = requests.get(anime_details_url)
 
-    if all_anime:
-        # Randomly select one anime from the collected list
-        selected_anime = random.choice(all_anime)
-        return {
-            'mal_id': selected_anime['mal_id'],
-            'title': selected_anime['title'],
-            'poster_url': selected_anime['images']['jpg']['large_image_url'],
-            'release_date': selected_anime['aired']['string'],
-            'genres': ', '.join([genre['name'] for genre in selected_anime['genres']]),
-            'synopsis': selected_anime['synopsis'],
-        }
+            if details_response.status_code == 200:
+                details_data = details_response.json()
 
-    return None
+                anime_details = details_data['data']
 
+                return {
+                    'mal_id': anime_details['mal_id'],
+                    'url': anime_details['url'],
+                    'images': anime_details['images'],
+                    'trailer': anime_details.get('trailer', None),
+                    'approved': anime_details.get('approved', None),
+                    'titles': anime_details.get('titles', []),
+                    'title': anime_details['title'],
+                    'title_english': anime_details.get('title_english', None),
+                    'title_japanese': anime_details.get('title_japanese', None),
+                    'title_synonyms': anime_details.get('title_synonyms', []),
+                    'type': anime_details.get('type', None),
+                    'source': anime_details.get('source', None),
+                    'episodes': anime_details.get('episodes', None),
+                    'status': anime_details.get('status', None),
+                    'airing': anime_details.get('airing', None),
+                    'aired': anime_details.get('aired', None),
+                    'duration': anime_details.get('duration', None),
+                    'rating': anime_details.get('rating', None),
+                    'score': anime_details.get('score', None),
+                    'scored_by': anime_details.get('scored_by', None),
+                    'rank': anime_details.get('rank', None),
+                    'popularity': anime_details.get('popularity', None),
+                    'members': anime_details.get('members', None),
+                    'favorites': anime_details.get('favorites', None),
+                    'synopsis': anime_details.get('synopsis', None),
+                    'background': anime_details.get('background', None),
+                    'season': anime_details.get('season', None),
+                    'year': anime_details.get('year', None),
+                    'producers': anime_details.get('producers', []),
+                    'studios': anime_details.get('studios', []),
+                    'genres': anime_details.get('genres', []),
+                    'explicit_genres': anime_details.get('explicit_genres', []),
+                    'themes': anime_details.get('themes', []),
+                    'demographics': anime_details.get('demographics', []),
+                }
 
-print(fetch_anime_by_difficulty(1))
+    else:
+        print(f"Error fetching anime data: {response.status_code}, {response.text}")
+
+pprint.pprint(fetch_anime_by_difficulty(1))
