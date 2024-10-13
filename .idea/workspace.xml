@@ -4,29 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2fb014e-5138-454f-b9aa-c8631c6b8a6b" name="Changes" comment="modified anime class not to be a model so that it does not persist to the db">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="c2fb014e-5138-454f-b9aa-c8631c6b8a6b" name="Changes" comment="port to backend folder">
       <change beforePath="$PROJECT_DIR$/.idea/AniRater.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AniRater/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AniRater/asgi.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AniRater/settings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AniRater/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AniRater/wsgi.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/AniRater/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AniRater/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/game/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/game/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/game/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/game/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,13 +92,30 @@
       <option name="project" value="LOCAL" />
       <updated>1728826825845</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="port to backend folder">
+      <option name="closed" value="true" />
+      <created>1728830292938</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728830292938</updated>
+    </task>
+    <task id="LOCAL-00005" summary="port to backend folder">
+      <option name="closed" value="true" />
+      <created>1728830314232</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728830314232</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fetch anime by difficulty level" />
     <MESSAGE value="utils update" />
     <MESSAGE value="modified anime class not to be a model so that it does not persist to the db" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified anime class not to be a model so that it does not persist to the db" />
+    <MESSAGE value="port to backend folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="port to backend folder" />
   </component>
 </project>

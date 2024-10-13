@@ -66,10 +66,8 @@ def fetch_anime_by_difficulty(level):
                     'type': selected_anime['type'],
                     'year': selected_anime['aired']['prop']['from']['year'],
                     'url': f'https://myanimelist.net/anime/{selected_anime["mal_id"]}/{selected_anime["title"].replace(" ", "_")}',
-                    'images': {
-                        'image_url': selected_anime['images']['jpg']['image_url'],
-                        'large_image_url': selected_anime['images']['jpg']['large_image_url'],
-                    },
+                    'image_url': selected_anime['images']['jpg']['image_url'],
+                    'large_image_url': selected_anime['images']['jpg']['large_image_url'],
                     'episodes': selected_anime.get('episodes', 'N/A'),
                     'favorites': selected_anime.get('favorites', 0),
                     'genres': [genre['name'] for genre in selected_anime['genres']],
@@ -86,6 +84,5 @@ def fetch_anime_by_difficulty(level):
         print(f"Error fetching anime data: {response.status_code}, {response.text}")
 
     return None
-
 
 pprint.pprint(fetch_anime_by_difficulty(1))
