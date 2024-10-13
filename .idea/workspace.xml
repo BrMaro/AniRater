@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2fb014e-5138-454f-b9aa-c8631c6b8a6b" name="Changes" comment="port to backend folder">
-      <change beforePath="$PROJECT_DIR$/.idea/AniRater.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+    <list default="true" id="c2fb014e-5138-454f-b9aa-c8631c6b8a6b" name="Changes" comment="barebones app functioning">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/AniRater/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/AniRater/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/game/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/game/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/game/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/game/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728830314232</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="barebones app functioning">
+      <option name="closed" value="true" />
+      <created>1728845679840</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728845679840</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -116,6 +117,7 @@
     <MESSAGE value="utils update" />
     <MESSAGE value="modified anime class not to be a model so that it does not persist to the db" />
     <MESSAGE value="port to backend folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="port to backend folder" />
+    <MESSAGE value="barebones app functioning" />
+    <option name="LAST_COMMIT_MESSAGE" value="barebones app functioning" />
   </component>
 </project>
