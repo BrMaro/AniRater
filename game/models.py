@@ -3,18 +3,29 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Anime(models.Model):
-    mal_id = models.IntegerField(unique=True)  # ID from MyAnimeList
-    title = models.CharField(max_length=255)
-    poster_url = models.URLField()
-    release_date = models.DateField()
-    genres = models.CharField(max_length=255)
-    synopsis = models.TextField()
-    youtube_summary_url = models.URLField()
-    rating = models.FloatField()  # MAL rating
+class Anime:
+    def __init__(self, mal_id, title, anime_type, year, url, image_url,
+                 large_image_url, episodes, favorites, genres, members,
+                 popularity, rank, score, scored_by, synopsis, youtube_url):
+        self.mal_id = mal_id
+        self.title = title
+        self.type = anime_type
+        self.year = year
+        self.url = url
+        self.image_url = image_url
+        self.large_image_url = large_image_url
+        self.episodes = episodes
+        self.favorites = favorites
+        self.genres = genres
+        self.members = members
+        self.popularity = popularity
+        self.rank = rank
+        self.score = score
+        self.scored_by = scored_by
+        self.synopsis = synopsis
+        self.youtube_url = youtube_url
 
     def __str__(self):
-        return self.title
     
 class GameSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
