@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './GameSession.css';
+
 
 const GameSession = () => {
     const [anime, setAnime] = useState(null);
@@ -39,42 +41,36 @@ const GameSession = () => {
     ] : [];
 
     return (
-        <div>
+        <div className="game-container">
             {anime ? (
-                <div>
-                    <h1>Guess the Anime Rating!</h1>
-                    {/* Show clues progressively based on clueIndex */}
-                    {clueIndex >= 0 && (
-                        <div>
-                            <img src={clues[0]} alt="Anime Poster" style={{ width: '300px' }} />
-                            <p><strong>Poster</strong></p>
-                        </div>
-                    )}
-                    {clueIndex >= 1 && <p><strong>Title & Year:</strong> {clues[1]}</p>}
-                    {clueIndex >= 2 && <p><strong>Genres:</strong> {clues[2]}</p>}
-                    {clueIndex >= 3 && <p><strong>Synopsis:</strong> {clues[3]}</p>}
-                    {clueIndex >= 4 && (
-                        <div>
-                            <p><strong>YouTube Trailer:</strong></p>
-                            <iframe
-                                width="560"
-                                height="315"
-                                src={`https://www.youtube.com/embed/${new URL(clues[4]).searchParams.get('v')}`}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title="Anime Trailer"
-                            />
-                        </div>
-                    )}
-                    {clueIndex >= 5 && <p><strong>Popularity:</strong> {clues[5]}</p>}
-                    {clueIndex >= 6 && <p><strong>Favorites:</strong> {clues[6]}</p>}
-                    {clueIndex >= 7 && <p><strong>Members:</strong> {clues[7]}</p>}
-                    {clueIndex >= 8 && <p><strong>Rank:</strong> {clues[8]}</p>}
-                    {clueIndex >= 9 && <p><strong>Scored By:</strong> {clues[9]}</p>}
+                <div className="anime-card">
+                    <h2>Guess the Anime Rating!</h2>
+                    
+                    <div className="anime-image-wrapper">
+                        {clueIndex >= 0 && <img className="anime-poster" src={anime.images.image_url} alt="Anime Poster" />}
+                    </div>
 
-                    {/* Button to reveal next clue */}
-                    <button onClick={revealNextClue} disabled={clueIndex >= 9}>
+                    <div className="anime-details">
+                        {clueIndex >= 1 && <p><strong>Title & Year:</strong> {anime.title} ({anime.year})</p>}
+                        {clueIndex >= 2 && <p><strong>Genres:</strong> {anime.genres.join(', ')}</p>}
+                        {clueIndex >= 3 && <p><strong>Synopsis:</strong> {anime.synopsis}</p>}
+                        {clueIndex >= 4 && (
+                            <div className="youtube-trailer">
+                                <iframe 
+                                    src={`https://www.youtube.com/embed/${new URL(anime.youtube_url).searchParams.get('v')}`} 
+                                    frameBorder="0" 
+                                    allowFullScreen 
+                                    title="Anime Trailer"
+                                />
+                            </div>
+                        )}
+                        {clueIndex >= 5 && <p><strong>Popularity:</strong> {clues[5]}</p>}
+                        {clueIndex >= 6 && <p><strong>Favorites:</strong> {clues[6]}</p>}
+                        {clueIndex >= 7 && <p><strong>Members:</strong> {clues[7]}</p>}
+                        {clueIndex >= 8 && <p><strong>Rank:</strong> {clues[8]}</p>}
+                        {clueIndex >= 9 && <p><strong>Scored By:</strong> {clues[9]}</p>}
+                    </div>
+                    <button onClick={revealNextClue} className="reveal-btn" disabled={clueIndex >= 9}>
                         {clueIndex >= 9 ? "No More Clues" : "Reveal Next Clue"}
                     </button>
                 </div>
