@@ -133,3 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # React development server
 ]
+
+# settings.py
+AUTH_USER_MODEL = 'users.User'

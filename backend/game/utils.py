@@ -87,4 +87,4 @@ def fetch_anime_by_difficulty(level):
 
     return None
 
-# pprint.pprint(fetch_anime_by_difficulty(1))
+# pprint.pprint(fetch_anime_by_difficulty(1)) 

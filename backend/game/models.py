@@ -32,25 +32,18 @@ class Anime:
 
 class GameSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.IntegerField(default=100)  # Start with 100, deduct with clues unlocked
-    clues_unlocked = models.IntegerField(default=0)
-    guess = models.FloatField(null=True, blank=True)  # User guess for the rating
+    score = models.IntegerField(default=100)  # Deduct score as clues are unlocked
+    guess = models.FloatField(null=True, blank=True)  # User guess for the anime rating
     created_at = models.DateTimeField(auto_now_add=True)
+    # start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(null=True, blank=True)
+
+    # def set_end_time(self):
+    #     self.end_time = timezone.now()
+
+    # def get_total_time(self):
+    #     if self.end_time:
+    #         return self.end_time - self.start_time
+    #     return None
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    xp = models.IntegerField(default=0)
-    level = models.IntegerField(default=1)
-    badges = models.ManyToManyField('Badge', blank=True)
-    streak = models.IntegerField(default=0)
-
-
-class Badge(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-
-
-class Follow(models.Model):
-    follower = models.ForeignKey(User, related_name='follower', on_delete=models.CASCADE)
-    followed = models.ForeignKey(User, related_name='followed', on_delete=models.CASCADE)

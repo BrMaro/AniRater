@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './GameSession.css';
+// import './styles/GameSession.css';
 
 
 const GameSession = () => {
@@ -45,7 +45,7 @@ const GameSession = () => {
             {anime ? (
                 <div className="anime-card">
                     <h2>Guess the Anime Rating!</h2>
-                    
+
                     <div className="anime-image-wrapper">
                         {clueIndex >= 0 && <img className="anime-poster" src={anime.images.image_url} alt="Anime Poster" />}
                     </div>
@@ -70,9 +70,11 @@ const GameSession = () => {
                         {clueIndex >= 8 && <p><strong>Rank:</strong> {clues[8]}</p>}
                         {clueIndex >= 9 && <p><strong>Scored By:</strong> {clues[9]}</p>}
                     </div>
+
                     <button onClick={revealNextClue} className="reveal-btn" disabled={clueIndex >= 9}>
                         {clueIndex >= 9 ? "No More Clues" : "Reveal Next Clue"}
                     </button>
+                    
                 </div>
             ) : (
                 <p>Loading...</p>
