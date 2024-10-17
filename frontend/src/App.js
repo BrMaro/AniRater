@@ -18,13 +18,12 @@ const App = () => {
 
 
       <Routes>
-        <Route path="/" element={<App />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={isAuthenticated ? <Profile /> : <Login />} />
         <Route path="/game-session" element={isAuthenticated ? <GameSession /> : <Login />} />
       </Routes>
-      
+
       </BaseLayout>
     </Router>
   );

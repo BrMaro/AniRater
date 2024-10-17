@@ -1,27 +1,41 @@
-from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from .serializers import UserSerializer
-from django.contrib.auth import authenticate, login, logout
-from django.db.utils import IntegrityError
+from rest_framework import status
+from users.models import User
+from django.db import IntegrityError
+import logging
 
-# Registration view
+logger = logging.getLogger(__name__)
+
 @api_view(['POST'])
 def register_user(request):
-    print("Registering")
+    logger.info("Starting user registration process")
     data = request.data
     
     # Check for missing fields
-    if not all(key in data for key in ('username', 'email', 'password')):
-        return Response({"error": "All fields (username, email, password) are required"}, status=status.HTTP_400_BAD_REQUEST)
+    required_fields = ('username', 'email', 'password')
+    if not all(key in data for key in required_fields):
+        logger.warning("Missing required fields in registration request")
+        return Response(
+            {"error": "All fields (username, email, password) are required"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
     
     try:
-        # Check for existing user
+        # Check for existing username/email with better error handling
         if User.objects.filter(username=data['username']).exists():
-            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+            logger.warning(f"Registration failed: Username '{data['username']}' already exists")
+            return Response(
+                {"error": "Username already exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
         if User.objects.filter(email=data['email']).exists():
-            return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+            logger.warning(f"Registration failed: Email '{data['email']}' already exists")
+            return Response(
+                {"error": "Email already exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         # Create user
         user = User.objects.create_user(
@@ -29,13 +43,25 @@ def register_user(request):
             email=data['email'],
             password=data['password']
         )
-        user.save()
-        return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-    except IntegrityError:
-        return Response({"error": "Database error occurred. Please try again later."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        logger.info(f"Successfully registered user: {data['username']}")
+        return Response(
+            {"message": "User registered successfully"}, 
+            status=status.HTTP_201_CREATED
+        )
+        
+    except IntegrityError as e:
+        logger.error(f"Database integrity error during registration: {str(e)}")
+        return Response(
+            {"error": "Database error occurred. Please try again later."}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
     except Exception as e:
-        return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        logger.error(f"Unexpected error during registration: {str(e)}")
+        return Response(
+            {"error": f"An error occurred: {str(e)}"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 # Login view
 @api_view(['POST'])
 def login_user(request):
