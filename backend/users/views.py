@@ -3,19 +3,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from users.models import User
 from django.db import IntegrityError
+from django.contrib.auth import authenticate,login
 import logging
 
 logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 def register_user(request):
-    logger.info("Starting user registration process")
+    # logger.info("Starting user registration process")
     data = request.data
     
     # Check for missing fields
     required_fields = ('username', 'email', 'password')
     if not all(key in data for key in required_fields):
-        logger.warning("Missing required fields in registration request")
+        # logger.warning("Missing required fields in registration request")
         return Response(
             {"error": "All fields (username, email, password) are required"}, 
             status=status.HTTP_400_BAD_REQUEST
@@ -24,14 +25,14 @@ def register_user(request):
     try:
         # Check for existing username/email with better error handling
         if User.objects.filter(username=data['username']).exists():
-            logger.warning(f"Registration failed: Username '{data['username']}' already exists")
+            # logger.warning(f"Registration failed: Username '{data['username']}' already exists")
             return Response(
                 {"error": "Username already exists"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
             
         if User.objects.filter(email=data['email']).exists():
-            logger.warning(f"Registration failed: Email '{data['email']}' already exists")
+            # logger.warning(f"Registration failed: Email '{data['email']}' already exists")
             return Response(
                 {"error": "Email already exists"}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -44,24 +45,25 @@ def register_user(request):
             password=data['password']
         )
         
-        logger.info(f"Successfully registered user: {data['username']}")
+        # logger.info(f"Successfully registered user: {data['username']}")
         return Response(
             {"message": "User registered successfully"}, 
             status=status.HTTP_201_CREATED
         )
         
     except IntegrityError as e:
-        logger.error(f"Database integrity error during registration: {str(e)}")
+        # logger.error(f"Database integrity error during registration: {str(e)}")
         return Response(
             {"error": "Database error occurred. Please try again later."}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
     except Exception as e:
-        logger.error(f"Unexpected error during registration: {str(e)}")
+        # logger.error(f"Unexpected error during registration: {str(e)}")
         return Response(
             {"error": f"An error occurred: {str(e)}"}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+    
 # Login view
 @api_view(['POST'])
 def login_user(request):

@@ -17,7 +17,7 @@ const Login = () => {
         setIsLoading(true); // Show loading state
         setMessage(''); // Clear any previous message
         try {
-            const response = await axios.post('http://localhost:8000/api/login/', { username, password });
+            const response = await axios.post('http://localhost:8000/login/', { username, password });
 
             // Assuming response contains success message and possibly a token
             if (response.status === 200) {
