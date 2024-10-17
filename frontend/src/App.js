@@ -24,6 +24,7 @@ const App = () => {
         <Route path="/profile" element={isAuthenticated ? <Profile /> : <Login />} />
         <Route path="/game-session" element={isAuthenticated ? <GameSession /> : <Login />} />
       </Routes>
+      
       </BaseLayout>
     </Router>
   );
