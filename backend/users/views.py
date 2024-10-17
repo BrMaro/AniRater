@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 # Registration view
 @api_view(['POST'])
 def register_user(request):
+    print("Registering")
     if request.method == 'POST':
         data = request.data
         user = User.objects.create_user(
@@ -23,6 +24,7 @@ def register_user(request):
 # Login view
 @api_view(['POST'])
 def login_user(request):
+    print("Logging in")
     data = request.data
     user = authenticate(username=data['username'], password=data['password'])
     if user is not None:
