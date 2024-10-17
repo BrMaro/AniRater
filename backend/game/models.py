@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 # Create your models here.
 
@@ -32,18 +32,33 @@ class Anime:
 
 class GameSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.IntegerField(default=100)  # Deduct score as clues are unlocked
-    guess = models.FloatField(null=True, blank=True)  # User guess for the anime rating
+    score = models.IntegerField(default=0)  
+    games_played = models.IntegerField(default=0)  
     created_at = models.DateTimeField(auto_now_add=True)
-    # start_time = models.DateTimeField(default=timezone.now)
+    start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True, blank=True)
 
-    # def set_end_time(self):
-    #     self.end_time = timezone.now()
+    def start_session(self):
+        """Start a new game session."""
+        self.start_time = timezone.now()
+        self.save()
 
-    # def get_total_time(self):
-    #     if self.end_time:
-    #         return self.end_time - self.start_time
-    #     return None
+    def end_session(self):
+        """End the game session and save the end time."""
+        self.end_time = timezone.now()
+        self.save()
 
+    def add_game(self, game_score):
+        """Add a new game to the session and accumulate the score."""
+        self.score += game_score  # Add the game's score to the total score
+        self.games_played += 1  # Increment the number of games played
+        self.save()
 
+    def get_total_time(self):
+        """Calculate the total duration of the game session."""
+        if self.end_time:
+            return self.end_time - self.start_time
+        return None
+
+    def __str__(self):
+        return f'GameSession(user={self.user.username}, score={self.score}, games_played={self.games_played})'

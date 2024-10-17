@@ -7,8 +7,6 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
 
 
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     xp = models.IntegerField(default=0)
