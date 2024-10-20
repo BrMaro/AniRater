@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -16,54 +16,63 @@ const Login = () => {
             return;
         }
 
-        setIsLoading(true); // Show loading state
-        setMessage(''); // Clear any previous message
+        setIsLoading(true);
+        setMessage('');
+        
         try {
-            const response = await axios.post('http://localhost:8000/login/', { username, password });
+            const response = await axios.post(
+                'http://localhost:8000/login/', 
+                { username, password },
+                { withCredentials: true }  // Important for cookies
+            );
 
-            // Assuming response contains success message and possibly a token
             if (response.status === 200) {
+                // Update authentication state
+                setIsAuthenticated({
+                    authenticated: true,
+                    username: username
+                });
                 setMessage('Login successful');
-                navigate("/")
-                // localStorage.setItem('token', response.data.token); // Store JWT token (if applicable)
-                // Redirect or update UI as needed (e.g., go to profile page)
-            } else {
-                setMessage('Login failed. Please check your credentials.');
+                navigate('/', { replace: true });
             }
         } catch (error) {
-            // Display specific error messages if available
             if (error.response && error.response.data) {
                 setMessage(error.response.data.error || 'Login failed. Please try again.');
             } else {
                 setMessage('Network error. Please try again.');
             }
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     return (
-        <div>
+        <div className="login-container">
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    disabled={isLoading} // Disable input while loading
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading} // Disable input while loading
-                />
+                <div className="form-group">
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        disabled={isLoading}
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        disabled={isLoading}
+                    />
+                </div>
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Logging in...' : 'Login'} {/* Show loading state in button */}
+                    {isLoading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="message">{message}</p>}
         </div>
     );
 };
