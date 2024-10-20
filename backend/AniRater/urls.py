@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from users.views import register_user,login_user
+from users.views import register_user,login_user,check_auth
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
+    path("check-auth/",check_auth, name="check-auth")
 ]

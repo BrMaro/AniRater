@@ -93,3 +93,13 @@ def profile_view(request):
             return Response({"error": f"An error occurred while fetching profile: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return Response({"error": "Not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['GET'])
+def check_auth(request):
+    if request.user.is_authenticated:
+        print(f"{request.user.username}")
+        return Response({"authenticated": True, "username": request.user.username})
+    else:
+        print("Not Authenticted")
+        return Response({"authenticated ":False})

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,7 +24,8 @@ const Login = () => {
             // Assuming response contains success message and possibly a token
             if (response.status === 200) {
                 setMessage('Login successful');
-                localStorage.setItem('token', response.data.token); // Store JWT token (if applicable)
+                navigate("/")
+                // localStorage.setItem('token', response.data.token); // Store JWT token (if applicable)
                 // Redirect or update UI as needed (e.g., go to profile page)
             } else {
                 setMessage('Login failed. Please check your credentials.');

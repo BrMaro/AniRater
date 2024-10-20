@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
+    const navigate = useNavigate();
 
     const validateForm = () => {
         const newErrors = {};
@@ -75,7 +77,7 @@ const Register = () => {
             });
             
             setMessage({ text: 'Registration successful!', type: 'success' });
-            
+            navigate("/")
             // Clear form after successful registration
             setFormData({
                 username: '',
