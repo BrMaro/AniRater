@@ -6,7 +6,7 @@ import GameSession from './components/GameSession';
 import BaseLayout from './components/BaseLayout';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
-import Home from './components/Home'; // Add this import
+import Home from './components/Home'; 
 import './styles/App.css'
 
 const App = () => {
@@ -25,7 +25,7 @@ const App = () => {
     };
 
     checkAuth();
-  }, []); // Empty dependency array for initial load only
+  }, []); 
 
   return (
     <Router>
@@ -56,13 +56,14 @@ const App = () => {
               <Navigate to="/login" replace />
             } 
           />
-          <Route 
+        <Route 
             path="/game-session" 
             element={
-              isAuthenticated.authenticated ? 
-              <GameSession /> : 
-              <Navigate to="/login" replace />
-            } 
+              <GameSession 
+                isAuthenticated={isAuthenticated.authenticated}
+                username={isAuthenticated.username}
+              />
+            }
           />
         </Routes>
       </BaseLayout>
