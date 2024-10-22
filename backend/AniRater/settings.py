@@ -135,5 +135,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',  # React development server
 ]
 
+CORS_ALLOW_CREDENTIALS = True  # Required for withCredentials
+
+
 # settings.py
 AUTH_USER_MODEL = 'users.User'

@@ -20,9 +20,7 @@ from users.views import register_user,login_user,check_auth
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include('game.urls')),
-    path('users/', include('users.urls')),
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
-    path("check-auth/",check_auth, name="check-auth")
+    path("check-auth/",check_auth, name="check-auth"),
 ]
