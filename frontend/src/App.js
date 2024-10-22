@@ -7,6 +7,7 @@ import BaseLayout from './components/BaseLayout';
 import Login from './Auth/Login';
 import Register from './Auth/Register';
 import Home from './components/Home'; 
+
 import './styles/App.css'
 
 const App = () => {
@@ -19,7 +20,7 @@ const App = () => {
         const response = await axios.get('http://localhost:8000/check-auth/', { withCredentials: true });
         setIsAuthenticated(response.data);
       } catch (error) {
-        console.error("Error checking authentication: ", error);
+        console.error("Erro\r checking authentication: ", error);
         setIsAuthenticated({ authenticated: false, username: '' });
       }
     };
@@ -32,37 +33,19 @@ const App = () => {
       <BaseLayout isAuthenticated={isAuthenticated}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/login" 
-            element={
-              isAuthenticated.authenticated ? 
-              <Navigate to="/" replace /> : 
+          <Route path="/login" element={isAuthenticated.authenticated ? <Navigate to="/" replace /> : 
               <Login setIsAuthenticated={setIsAuthenticated} />
             } 
           />
-          <Route 
-            path="/register" 
-            element={
-              isAuthenticated.authenticated ? 
-              <Navigate to="/" replace /> : 
+          <Route path="/register" element={isAuthenticated.authenticated ? <Navigate to="/" replace /> : 
               <Register />
             } 
           />
-          <Route 
-            path="/profile" 
-            element={
-              isAuthenticated.authenticated ? 
-              <Profile /> : 
+          <Route path="/profile" element={isAuthenticated.authenticated ? <Profile /> : 
               <Navigate to="/login" replace />
             } 
           />
-        <Route 
-            path="/game-session" 
-            element={
-              <GameSession 
-                isAuthenticated={isAuthenticated.authenticated}
-                username={isAuthenticated.username}
-              />
+          <Route path="/game-session" element={<GameSession isAuthenticated={isAuthenticated.authenticated}username={isAuthenticated.username}/>
             }
           />
         </Routes>

@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.views import register_user,login_user,check_auth
+from game.views import random_anime,get_level_previews,get_level_previews_async
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
     path("check-auth/",check_auth, name="check-auth"),
+    path('api/level-previews/<int:level>/', get_level_previews, name='level_previews'),
+    path('api/random-anime/<int:difficulty>/', random_anime, name='random_anime'),
 ]

@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from .utils import fetch_anime_by_difficulty
+from .utils import fetch_anime_by_difficulty_async
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
@@ -45,12 +46,17 @@ def get_level_previews(request, level):
 @api_view(['GET'])
 async def get_level_previews_async(request, level):
     """Get 3 anime previews asynchronously for better performance"""
-    preview_count = 3
-    tasks = [fetch_anime_by_difficulty(level) for _ in range(preview_count)]
-    
     try:
+        preview_count = 3
+        # Create tasks for fetching previews
+        tasks = [fetch_anime_by_difficulty_async(level) for _ in range(preview_count)]
+        
+        # Wait for all tasks to complete
+        results = await asyncio.gather(*tasks)
+        
+        # Filter out None results and format the previews
         previews = []
-        for anime_data in tasks:
+        for anime_data in results:
             if anime_data:
                 preview = {
                     'mal_id': anime_data['mal_id'],
@@ -63,8 +69,15 @@ async def get_level_previews_async(request, level):
         
         if previews:
             return Response(previews)
+        
+        return Response(
+            {'error': 'Failed to fetch previews'}, 
+            status=404
+        )
             
     except Exception as e:
-        return Response({'error': str(e)}, status=500)
-    
-    return Response({'error': 'Failed to fetch previews'}, status=404)
+        print(f"Error in get_level_previews: {str(e)}")  # Add logging
+        return Response(
+            {'error': f'Failed to fetch previews: {str(e)}'}, 
+            status=500
+        )

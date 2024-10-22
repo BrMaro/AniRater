@@ -1,43 +1,44 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import '../styles/home.css';
-
 
 const Home = () => {
     const [levelPreviews, setLevelPreviews] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    useEffect(()=>{
+    console.log("home")
+    useEffect(() => {
         const fetchLevelPreviews = async () => {
             setLoading(true);
             try {
-                const levels = [1,2,3,4,5,6];
+                const levels = [1, 2, 3, 4, 5, 6];
                 const previews = {};
 
-                for (const level of levels) {
-                    const animeList = [];
-                    //Fetch 3 anime for preview
-                    for (let i = 0; i < 3; i++) {
-                        const response = await axios.get(`/api/random-anime/${level}/`);
-                        animeList.push(response.data);
-                    }
+                // Fetch all levels in parallel
+                const responses = await Promise.all(
+                    levels.map(level => 
+                        axios.get(`/api/level-previews/${level}/`)
+                    )
+                );
 
-                    previews[level] = animeList
-                } 
-                setLevelPreviews (previews);
-         
+                responses.forEach((response, index) => {
+                    const level = levels[index];
+                    previews[level] = response.data;
+                });
+
+                setLevelPreviews(previews);
             } catch (error) {
                 console.error('Error fetching previews:', error);
-                setError('Failed to load anime previews. Please try again later.');
+                setError(error.response?.data?.error || 'Failed to load anime previews. Please try again later.');
             } finally {
                 setLoading(false);
             }
         };
         
         fetchLevelPreviews();
-    },[]);
+    }, []);
 
+    // Rest of your component remains the same
     const getLevelName = (level) => {
         const names = {
             1: "Very Easy (Top 250)",
@@ -47,10 +48,9 @@ const Home = () => {
             5: "Very Hard (3000-5000)",
             6: "God Mode (5000+)"
         };
-        return names[level]
-    }
+        return names[level];
+    };
 
-    
     if (loading) {
         return (
             <div className="landing-container">
@@ -79,8 +79,6 @@ const Home = () => {
             </div>
         );
     }
-
-
 
     return (
         <div className="landing-container">
@@ -123,6 +121,5 @@ const Home = () => {
         </div>
     );
 };
-
 
 export default Home;
