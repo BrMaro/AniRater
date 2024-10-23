@@ -6,26 +6,36 @@ const Home = () => {
     const [levelPreviews, setLevelPreviews] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log("home")
+    
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
     useEffect(() => {
         const fetchLevelPreviews = async () => {
             setLoading(true);
             try {
                 const levels = [1, 2, 3, 4, 5, 6];
                 const previews = {};
-
-                // Fetch all levels in parallel
-                const responses = await Promise.all(
-                    levels.map(level => 
-                        axios.get(`/api/level-previews/${level}/`)
-                    )
-                );
-
-                responses.forEach((response, index) => {
-                    const level = levels[index];
-                    previews[level] = response.data;
-                });
-
+    
+                // Process in batches of 3 (to respect rate limit)
+                for (let i = 0; i < levels.length; i += 3) {
+                    const batch = levels.slice(i, i + 3);
+                    const responses = await Promise.all(
+                        batch.map(level => 
+                            axios.get(`/api/level-previews/${level}/`)
+                        )
+                    );
+                    
+                    responses.forEach((response, index) => {
+                        const level = batch[index];
+                        previews[level] = response.data;
+                    });
+    
+                    // Wait 1 second before next batch
+                    if (i + 3 < levels.length) {
+                        await delay(1000);
+                    }
+                }
+    
                 setLevelPreviews(previews);
             } catch (error) {
                 console.error('Error fetching previews:', error);
@@ -34,7 +44,7 @@ const Home = () => {
                 setLoading(false);
             }
         };
-        
+    
         fetchLevelPreviews();
     }, []);
 

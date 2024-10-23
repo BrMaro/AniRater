@@ -4,30 +4,47 @@ from django.utils import timezone
 
 # Create your models here.
 
-class Anime:
-    def __init__(self, mal_id, title, anime_type, year, url, image_url,
-                 large_image_url, episodes, favorites, genres, members,
-                 popularity, rank, score, scored_by, synopsis, youtube_url):
-        self.mal_id = mal_id
-        self.title = title
-        self.type = anime_type
-        self.year = year
-        self.url = url
-        self.image_url = image_url
-        self.large_image_url = large_image_url
-        self.episodes = episodes
-        self.favorites = favorites
-        self.genres = genres
-        self.members = members
-        self.popularity = popularity
-        self.rank = rank
-        self.score = score
-        self.scored_by = scored_by
-        self.synopsis = synopsis
-        self.youtube_url = youtube_url
+# models.py
+from django.db import models
 
+class Anime(models.Model):
+    mal_id = models.IntegerField(unique=True)
+    title = models.CharField(max_length=255)
+    anime_type = models.CharField(max_length=50)
+    year = models.IntegerField(null=True)
+    url = models.URLField()
+    image_url = models.URLField()
+    large_image_url = models.URLField()
+    episodes = models.IntegerField(null=True)
+    favorites = models.IntegerField(default=0)
+    members = models.IntegerField(default=0)
+    popularity = models.IntegerField(null=True)
+    rank = models.IntegerField(null=True)
+    score = models.FloatField(null=True)
+    scored_by = models.IntegerField(default=0)
+    synopsis = models.TextField(null=True, blank=True)
+    youtube_url = models.URLField(null=True, blank=True)
+    
+    # Store genres as comma-separated string
+    genres = models.TextField()
+    
+    # Add timestamps for tracking
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['mal_id']),
+            models.Index(fields=['title']),
+        ]
+    
     def __str__(self):
         return self.title
+    
+    @property
+    def genres_list(self):
+        """Convert stored genres string to list"""
+        return [genre.strip() for genre in self.genres.split(',') if genre.strip()]
 
 
 class GameSession(models.Model):

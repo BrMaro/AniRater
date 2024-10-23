@@ -4,7 +4,6 @@ from .utils import fetch_anime_by_difficulty_async
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import Anime
 import random
 
 # Create your views here.
@@ -17,6 +16,7 @@ def random_anime(request, difficulty):
         return JsonResponse(anime_data)
 
     return JsonResponse({'error': 'Anime not found'}, status=404)
+
 
 @api_view(['GET'])
 def get_level_previews(request, level):
@@ -42,9 +42,11 @@ def get_level_previews(request, level):
     
     return Response({'error': 'Failed to fetch previews'}, status=404)
 
+
 # Optional: Async version for better performance
 @api_view(['GET'])
 async def get_level_previews_async(request, level):
+
     """Get 3 anime previews asynchronously for better performance"""
     try:
         preview_count = 3
@@ -81,3 +83,4 @@ async def get_level_previews_async(request, level):
             {'error': f'Failed to fetch previews: {str(e)}'}, 
             status=500
         )
+    

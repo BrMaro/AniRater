@@ -3,6 +3,9 @@ import pprint
 import random
 import requests
 import aiohttp
+import time
+from django.conf import settings
+from.models import Anime
 import asyncio
 # from .models import Anime
 
@@ -89,6 +92,7 @@ def fetch_anime_by_difficulty(level):
 
     return None
 
+
 # pprint.pprint(fetch_anime_by_difficulty(1)) 
 async def fetch_anime_from_jikan_async(session, mal_id):
     url = f'{JIKAN_API_URL}/anime/{mal_id}'
@@ -160,3 +164,62 @@ async def fetch_anime_by_difficulty_async(level):
                 print(f"Error fetching anime data: {response.status}")
 
     return None
+
+
+def fetch_and_store_anime(anime_ids):
+    """
+    Fetch anime data from Jikan API and store in database
+    
+    Args:
+        anime_ids (list): List of MAL IDs to fetch
+    """
+    base_url = "https://api.jikan.moe/v4/anime"
+    
+    for i, mal_id in enumerate(anime_ids):
+        try:
+            # Check if anime already exists in DB
+            if Anime.objects.filter(mal_id=mal_id).exists():
+                print(f"Anime {mal_id} already exists in DB. Skipping...")
+                continue
+                
+            # Respect rate limit (3 requests per second)
+            if i > 0 and i % 3 == 0:
+                time.sleep(1)
+            
+            # Fetch from Jikan
+            response = requests.get(f"{base_url}/{mal_id}")
+            response.raise_for_status()
+            data = response.json()['data']
+            
+            # Extract genres
+            genres = ','.join([genre['name'] for genre in data.get('genres', [])])
+            
+            # Create AnimeModel instance
+            anime = Anime(
+                mal_id=data['mal_id'],
+                title=data['title'],
+                anime_type=data['type'],
+                year=data.get('year'),
+                url=data['url'],
+                image_url=data['images']['jpg']['image_url'],
+                large_image_url=data['images']['jpg']['large_image_url'],
+                episodes=data.get('episodes'),
+                favorites=data.get('favorites', 0),
+                genres=genres,
+                members=data.get('members', 0),
+                popularity=data.get('popularity'),
+                rank=data.get('rank'),
+                score=data.get('score'),
+                scored_by=data.get('scored_by', 0),
+                synopsis=data.get('synopsis'),
+                youtube_url=data.get('trailer', {}).get('url')
+            )
+            anime.save()
+            print(f"Successfully stored anime {mal_id}")
+            
+        except Exception as e:
+            print(f"Error fetching/storing anime {mal_id}: {str(e)}")
+            continue
+
+mal_ids = [i for i in range(30000)]
+fetch_and_store_anime(mal_ids)
