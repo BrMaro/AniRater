@@ -1,12 +1,5 @@
-# your_app/utils.py
-import pprint
 import random
-import requests
-import aiohttp
-import time
-from django.conf import settings
 from .models import Anime
-import os
 
 
 
@@ -36,12 +29,12 @@ def fetch_anime_by_difficulty(level):
     
     return None
 
+
 def anime_to_dict(anime):
     """Convert Anime model instance to dictionary format matching the original API response"""
     return {
         'mal_id': anime.mal_id,
         'title': anime.title,
-        'type': anime.type,
         'year': anime.year,
         'url': anime.url,
         'images': {
@@ -50,7 +43,7 @@ def anime_to_dict(anime):
         },
         'episodes': anime.episodes,
         'favorites': anime.favorites,
-        'genres': anime.get_genres_list(),
+        'genres': anime.genres_list,
         'members': anime.members,
         'popularity': anime.popularity,
         'rank': anime.rank,

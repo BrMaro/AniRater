@@ -1,6 +1,5 @@
 from django.http import JsonResponse
 from .utils import fetch_anime_by_difficulty
-from .utils import fetch_anime_by_difficulty_async
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Q

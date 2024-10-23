@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.views import register_user,login_user,check_auth
-from game.views import random_anime,get_level_previews,get_level_previews_async
+from game.views import random_anime,get_level_previews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
