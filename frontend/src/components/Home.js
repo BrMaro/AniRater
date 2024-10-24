@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { motion, AnimatePresence } from "framer-motion";
 import '../styles/home.css';
 
 const Home = () => {
+    const navigate = useNavigate();
     const [levelPreviews, setLevelPreviews] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [visiblePair, setVisiblePair] = useState(0);
+    const [isTyping, setIsTyping] = useState(true);
     
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -48,12 +51,16 @@ const Home = () => {
         fetchLevelPreviews();
     }, []);
 
-    // Rotate through level pairs every 5 seconds
     useEffect(() => {
         if (!loading) {
-            const interval = setInterval(() => {
-                setVisiblePair((prev) => (prev + 1) % 3); // 3 pairs of levels (1-2, 3-4, 5-6)
-            }, 5000);
+            const changeLevel = async () => {
+                setIsTyping(false);
+                await delay(1000);
+                setVisiblePair((prev) => (prev + 1) % 3);
+                setIsTyping(true);
+            };
+
+            const interval = setInterval(changeLevel, 10000);
 
             return () => clearInterval(interval);
         }
@@ -75,7 +82,7 @@ const Home = () => {
         return (
             <div className="landing-container">
                 <div className="sidebar">
-                    <div className="glass-box">
+                    <div className="title-box">
                         <h1>AnimGuess</h1>
                         <p>Loading your anime adventure...</p>
                     </div>
@@ -91,7 +98,7 @@ const Home = () => {
         return (
             <div className="landing-container">
                 <div className="sidebar">
-                    <div className="glass-box">
+                    <div className="title-box">
                         <h1>AnimGuess</h1>
                         <p>{error}</p>
                     </div>
@@ -105,9 +112,20 @@ const Home = () => {
     return (
         <div className="landing-container">
             <div className="sidebar">
-                <div className="glass-box">
+                <div className="title-box">
                     <h1>AnimGuess</h1>
                     <p>Just another anime guessing game? No. Well yea with a unique twist, we test how well do you know an anime's rating!</p>
+                    <motion.button
+                        className="portal-button"
+                        onClick={() => navigate('/game-session')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        Enter the Challenge
+                    </motion.button>
                 </div>
             </div>
             <div className="main-content">
@@ -116,19 +134,20 @@ const Home = () => {
                         <motion.div
                             key={level}
                             className="level-section"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             transition={{ duration: 0.5 }}
                         >
                             <motion.h2 
                                 className="level-title"
-                                initial={{ width: 0 }}
-                                animate={{ width: "100%" }}
+                                animate={{
+                                    width: isTyping ? "100%" : "0%",
+                                }}
                                 transition={{ 
-                                    duration: 1, 
+                                    duration: isTyping ? 1 : 0.5,
                                     delay: levelIndex * 0.5,
-                                    ease: "easeOut"
+                                    ease: "easeInOut"
                                 }}
                             >
                                 {getLevelName(level)}
@@ -138,17 +157,11 @@ const Home = () => {
                                     <motion.div 
                                         key={anime.mal_id}
                                         className="anime-card"
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
                                         transition={{ 
                                             duration: 0.5,
                                             delay: levelIndex * 0.5 + index * 0.2 + 1
-                                        }}
-                                        whileHover={{
-                                            scale: 1.02,
-                                            rotateY: 5,
-                                            rotateX: -5,
-                                            transition: { duration: 0.2 }
                                         }}
                                     >
                                         <div className="anime-image">
@@ -167,8 +180,6 @@ const Home = () => {
                                                 <span>Score: {anime.score}</span>
                                                 <span>Rank: #{anime.rank}</span>
                                                 <span>Popularity: #{anime.popularity}</span>
-                                                <span>Members: {anime.members?.toLocaleString()}</span>
-                                                <span>Favorites: {anime.favorites?.toLocaleString()}</span>
                                             </div>
                                         </div>
                                     </motion.div>
